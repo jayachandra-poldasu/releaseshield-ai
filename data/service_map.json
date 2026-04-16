@@ -1,0 +1,17 @@
+{
+  "payment-gateway": {
+    "criticality": 10,
+    "dependencies": ["vpc-main-network", "order-db"],
+    "owner": "fin-tech"
+  },
+  "inventory-api": {
+    "criticality": 7,
+    "dependencies": ["vpc-main-network"],
+    "owner": "logistics"
+  },
+  "auth-service": {
+    "criticality": 9,
+    "dependencies": ["redis-cache"],
+    "owner": "security-team"
+  }
+}
