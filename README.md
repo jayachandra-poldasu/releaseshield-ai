@@ -103,7 +103,7 @@ ruff check app/ tests/
 
 ---
 
-## 🎯 Interview Talking Points
+## 🎯 Int Talking Points
 
 ### "Walk me through how this works"
 
