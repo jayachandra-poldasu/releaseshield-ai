@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  # ── FastAPI Backend ───────────────────────────────────────────────────────
+  api:
+    build: .
+    container_name: releaseshield-api
+    ports:
+      - "8000:8000"
+    environment:
+      - RELEASESHIELD_AI_BACKEND=ollama
+      - RELEASESHIELD_OLLAMA_URL=http://ollama:11434/api/generate
+      - RELEASESHIELD_OLLAMA_MODEL=llama3
+      - RELEASESHIELD_DATA_DIR=/app/data
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - releaseshield
+
+  # ── Streamlit UI ──────────────────────────────────────────────────────────
+  ui:
+    build: .
+    container_name: releaseshield-ui
+    ports:
+      - "8501:8501"
+    command: ["streamlit", "run", "ui.py", "--server.port=8501", "--server.headless=true"]
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - releaseshield
+
+  # ── Ollama (Local LLM) ───────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: releaseshield-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - releaseshield
+
+volumes:
+  ollama_data:
+
+networks:
+  releaseshield:
+    driver: bridge

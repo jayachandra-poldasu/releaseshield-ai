@@ -1,12 +1,65 @@
 [
-  {
-    "resource": "vpc-main-network",
-    "incident": "Global network partition - 2024",
-    "risk_factor": 50
-  },
-  {
-    "resource": "order-db",
-    "incident": "Database lock timeout - 2025",
-    "risk_factor": 30
-  }
+    {
+        "service": "auth-service",
+        "issue": "Memory leak in JWT validation caused cascading failures",
+        "severity": "High",
+        "date": "2025-11-15",
+        "root_cause": "Unbounded token cache in authentication middleware without TTL eviction",
+        "resolution": "Added LRU cache with 10-minute TTL and max 10K entries",
+        "mttr_hours": 4.5
+    },
+    {
+        "service": "auth-service",
+        "issue": "Public endpoint exposed after firewall rule misconfiguration",
+        "severity": "Critical",
+        "date": "2025-08-22",
+        "root_cause": "Firewall rule allowed 0.0.0.0/0 ingress during network migration",
+        "resolution": "Reverted firewall rule, added policy-as-code gate to CI pipeline",
+        "mttr_hours": 1.2
+    },
+    {
+        "service": "payment-api",
+        "issue": "Timeout on 3rd party payment gateway during peak hours",
+        "severity": "Medium",
+        "date": "2025-10-03",
+        "root_cause": "Connection pool exhaustion due to missing timeout configuration",
+        "resolution": "Configured connection pool limits and circuit breaker pattern",
+        "mttr_hours": 2.0
+    },
+    {
+        "service": "payment-api",
+        "issue": "Data exposure via overly permissive IAM binding on storage bucket",
+        "severity": "Critical",
+        "date": "2025-06-18",
+        "root_cause": "IAM binding granted allUsers read access to transaction logs bucket",
+        "resolution": "Removed public binding, rotated credentials, added IAM policy checks",
+        "mttr_hours": 0.8
+    },
+    {
+        "service": "user-dashboard",
+        "issue": "Slow page loads after database scaling change",
+        "severity": "Medium",
+        "date": "2025-09-10",
+        "root_cause": "Node pool scaled down below minimum threshold during maintenance window",
+        "resolution": "Set autoscaling minimum to 3 nodes, added performance monitoring alerts",
+        "mttr_hours": 3.0
+    },
+    {
+        "service": "monitoring-agent",
+        "issue": "Agent crash loop after config update deployment",
+        "severity": "Low",
+        "date": "2025-12-01",
+        "root_cause": "Invalid YAML configuration pushed without validation",
+        "resolution": "Added config validation step to deployment pipeline",
+        "mttr_hours": 1.5
+    },
+    {
+        "service": "notification-service",
+        "issue": "Email delivery failures due to missing encryption on SMTP relay",
+        "severity": "Medium",
+        "date": "2025-07-25",
+        "root_cause": "TLS certificate expired on internal SMTP relay without alerting",
+        "resolution": "Renewed certificate, added expiry monitoring with 30-day advance alerts",
+        "mttr_hours": 2.5
+    }
 ]

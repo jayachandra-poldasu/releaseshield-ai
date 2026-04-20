@@ -2,9 +2,30 @@
 venv/
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Environment
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Mac
 .DS_Store
 
-# Data (Optional: if you want to keep your local data private)
-# data/*.json
+# Docker
+*.log

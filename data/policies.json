@@ -1,0 +1,86 @@
+{
+    "version": "1.0",
+    "description": "ReleaseShield AI policy rule definitions for infrastructure governance",
+    "rules": [
+        {
+            "rule_id": "R001",
+            "name": "Public IP / Open CIDR Block",
+            "description": "Detects unrestricted network access via 0.0.0.0/0 CIDR blocks",
+            "severity": "Critical",
+            "category": "network",
+            "patterns": ["0\\.0\\.0\\.0/0", "source_ranges.*\\*", "::/0"],
+            "classification_impact": "HOLD",
+            "remediation": "Restrict source_ranges to specific IP ranges or VPN CIDRs"
+        },
+        {
+            "rule_id": "R002",
+            "name": "Overly Permissive IAM Binding",
+            "description": "Detects IAM bindings granting access to allUsers or allAuthenticatedUsers",
+            "severity": "Critical",
+            "category": "iam",
+            "patterns": ["allUsers", "allAuthenticatedUsers", "roles/owner"],
+            "classification_impact": "HOLD",
+            "remediation": "Use specific service accounts or group bindings instead"
+        },
+        {
+            "rule_id": "R003",
+            "name": "Missing Encryption Configuration",
+            "description": "Storage or database resources should have encryption enabled",
+            "severity": "High",
+            "category": "encryption",
+            "patterns": ["google_storage_bucket(?!.*encryption)", "google_sql_database_instance(?!.*require_ssl)"],
+            "classification_impact": "CANARY",
+            "remediation": "Add encryption block with CMEK or Google-managed encryption"
+        },
+        {
+            "rule_id": "R004",
+            "name": "Missing Resource Labels/Tags",
+            "description": "All cloud resources should have labels for cost allocation and ownership",
+            "severity": "Medium",
+            "category": "governance",
+            "patterns": ["resource\\s+\"google_\\w+\"(?![\\s\\S]*?labels\\s*=)", "resource\\s+\"aws_\\w+\"(?![\\s\\S]*?tags\\s*=)"],
+            "classification_impact": "CANARY",
+            "remediation": "Add required labels: environment, team, service, cost_center"
+        },
+        {
+            "rule_id": "R005",
+            "name": "Overly Permissive Firewall Rule",
+            "description": "Firewall rules allowing all protocols or all ports increase attack surface",
+            "severity": "Critical",
+            "category": "network",
+            "patterns": ["allow\\s*\\{[^}]*protocol\\s*=\\s*\"all\"", "allow\\s*\\{[^}]*ports\\s*=\\s*\\[\"0-65535\"\\]"],
+            "classification_impact": "HOLD",
+            "remediation": "Restrict to specific protocols (TCP/UDP) and required port ranges only"
+        },
+        {
+            "rule_id": "R006",
+            "name": "Auto-Scaling Disabled on Node Pool",
+            "description": "GKE node pools without autoscaling may fail under traffic spikes",
+            "severity": "Medium",
+            "category": "scaling",
+            "patterns": ["node_pool(?![\\s\\S]*?autoscaling\\s*\\{)", "autoscaling\\s*\\{[^}]*disabled\\s*=\\s*true"],
+            "classification_impact": "CANARY",
+            "remediation": "Enable autoscaling with appropriate min/max node counts"
+        },
+        {
+            "rule_id": "R007",
+            "name": "Public GKE Cluster (Missing Private Config)",
+            "description": "GKE clusters should use private_cluster_config to prevent public exposure",
+            "severity": "Critical",
+            "category": "network",
+            "patterns": ["google_container_cluster(?![\\s\\S]*?private_cluster_config\\s*\\{)", "enable_private_nodes\\s*=\\s*false"],
+            "classification_impact": "HOLD",
+            "remediation": "Add private_cluster_config with enable_private_nodes = true"
+        },
+        {
+            "rule_id": "R008",
+            "name": "Deletion Protection Disabled",
+            "description": "Critical resources should have deletion protection to prevent data loss",
+            "severity": "High",
+            "category": "protection",
+            "patterns": ["deletion_protection\\s*=\\s*false", "force_destroy\\s*=\\s*true"],
+            "classification_impact": "CANARY",
+            "remediation": "Set deletion_protection = true for production resources"
+        }
+    ]
+}

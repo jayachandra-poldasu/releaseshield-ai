@@ -1,17 +1,37 @@
 {
-  "payment-gateway": {
-    "criticality": 10,
-    "dependencies": ["vpc-main-network", "order-db"],
-    "owner": "fin-tech"
-  },
-  "inventory-api": {
-    "criticality": 7,
-    "dependencies": ["vpc-main-network"],
-    "owner": "logistics"
-  },
-  "auth-service": {
-    "criticality": 9,
-    "dependencies": ["redis-cache"],
-    "owner": "security-team"
-  }
+    "auth-service": {
+        "criticality": "Critical",
+        "dependencies": ["payment-api", "user-dashboard", "gateway-proxy"],
+        "owner": "Sarah Chen",
+        "team": "Platform Engineering",
+        "sla_tier": "Tier-1 (99.99%)"
+    },
+    "payment-api": {
+        "criticality": "High",
+        "dependencies": ["database-cluster-main", "fraud-detection-service"],
+        "owner": "Marcus Rodriguez",
+        "team": "Financial Services",
+        "sla_tier": "Tier-1 (99.99%)"
+    },
+    "monitoring-agent": {
+        "criticality": "Medium",
+        "dependencies": [],
+        "owner": "Aisha Patel",
+        "team": "SRE / Observability",
+        "sla_tier": "Tier-3 (99.9%)"
+    },
+    "user-dashboard": {
+        "criticality": "High",
+        "dependencies": ["auth-service", "notification-service"],
+        "owner": "James Kim",
+        "team": "Frontend Platform",
+        "sla_tier": "Tier-2 (99.95%)"
+    },
+    "notification-service": {
+        "criticality": "Medium",
+        "dependencies": ["email-gateway", "sms-provider"],
+        "owner": "Priya Sharma",
+        "team": "Communications",
+        "sla_tier": "Tier-3 (99.9%)"
+    }
 }

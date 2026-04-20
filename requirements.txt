@@ -1,4 +1,8 @@
 fastapi
-uvicorn
+uvicorn[standard]
+pydantic
+pydantic-settings
 requests
 streamlit
+pandas
+python-dotenv
