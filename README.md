@@ -10,7 +10,7 @@ ReleaseShield AI is a proactive SRE tool designed to eliminate **toil** in the i
 
 ---
 
-## ⚡ Interview Quick Start (Copy-Paste Ready)
+## ⚡ Int Quick Start (Copy-Paste Ready)
 
 > **Everything below runs without GPU, API keys, or Docker.** Just Python 3.11+.
 
